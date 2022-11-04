@@ -11,7 +11,7 @@ var _ai: FighterAI
 onready var _sprite: Sprite3D = $Sprite
 onready var _floor_cast: RayCast = $Sprite/GroundCast
 onready var _hit_state_manager: Fray.Collision.HitStateManager3D = $Sprite/HitStateManager
-#onready var _combat_sm: CombatStateMachine = $CombatStateMachine
+onready var _combat_sm: Fray.State.CombatStateMachine = $CombatStateMachine
 onready var _animation_player: AnimationPlayer = $AnimationPlayer
 onready var _animation_tree: AnimationTree = $AnimationTree
 
@@ -103,10 +103,7 @@ func _repositioned_impl(from: Vector3) -> void:
 	var tween := create_tween()
 	tween.tween_method(self, "_interpolate_sprite", 0.0, 1.0, 0.2, [from, global_translation])
 
-"""
-func _setup_impl(__combat_sm: CombatStateMachine) -> void:
-	pass
-"""
+
 """
 func _on_FrayInput_input_detected(input_event: Fray.Input.FrayInputEvent) -> void:
 	if input_event.is_just_pressed() and input_event.filtered and input_event.device == device:
