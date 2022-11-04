@@ -8,10 +8,57 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "Spatial",
+"class": "CameraGimbal",
+"language": "GDScript",
+"path": "res://lib/nodes/3d/camera_gimbal.gd"
+}, {
+"base": "",
+"class": "Fighter",
+"language": "GDScript",
+"path": "res://src/fighter/base/fighter.gd"
+}, {
+"base": "Reference",
+"class": "FighterAI",
+"language": "GDScript",
+"path": "res://src/fighter/base/ai/fighter_ai.gd"
+}, {
+"base": "Object",
+"class": "Fray",
+"language": "GDScript",
+"path": "res://addons/fray/_namespace.gd"
+}, {
+"base": "Object",
+"class": "Math",
+"language": "GDScript",
+"path": "res://lib/utils/math.gd"
+} ]
+_global_script_class_icons={
+"CameraGimbal": "",
+"Fighter": "",
+"FighterAI": "",
+"Fray": "",
+"Math": ""
+}
+
 [application]
 
 config/name="World X Tourney"
 config/icon="res://icon.png"
+
+[autoload]
+
+FrayInputMap="*res://addons/fray/src/input/autoloads/fray_input_map.gd"
+FrayInput="*res://addons/fray/src/input/autoloads/fray_input.gd"
+
+[debug]
+
+gdscript/warnings/return_value_discarded=false
+
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/fray/plugin.cfg" )
 
 [gui]
 

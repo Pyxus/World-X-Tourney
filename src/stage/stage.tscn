@@ -1,0 +1,62 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://src/stage/stage.gd" type="Script" id=1]
+[ext_resource path="res://assets/materials/prototype/kenney_textures/texture_11.png" type="Texture" id=2]
+[ext_resource path="res://assets/envrionments/improved_default_env.tres" type="Environment" id=4]
+[ext_resource path="res://assets/materials/prototype/prototype_8.tres" type="Material" id=5]
+
+[sub_resource type="SpatialMaterial" id=6]
+albedo_texture = ExtResource( 2 )
+uv1_offset = Vector3( 0.247, 0, 0 )
+
+[sub_resource type="PlaneMesh" id=1]
+material = ExtResource( 5 )
+size = Vector2( 500, 500 )
+
+[node name="Stage" type="Spatial"]
+script = ExtResource( 1 )
+
+[node name="World" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.55994, 0 )
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="World"]
+environment = ExtResource( 4 )
+
+[node name="DirectionalLight" type="DirectionalLight" parent="World"]
+transform = Transform( 0.838423, 0.428936, -0.336245, 0, 0.61694, 0.78701, 0.54502, -0.659847, 0.517257, 0, 16.2291, 4.51471 )
+shadow_enabled = true
+
+[node name="CSGCylinder" type="CSGCylinder" parent="World"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -60 )
+radius = 20.0
+height = 50.0
+sides = 20
+material = SubResource( 6 )
+
+[node name="CSGBox3" type="CSGBox" parent="World/CSGCylinder"]
+transform = Transform( 0.477189, 0, 0.8788, 0, 1, 0, -0.8788, 0, 0.477189, -17.476, 22.8587, -38.0583 )
+width = 9.60344
+height = 37.1351
+depth = 19.5304
+
+[node name="CSGBox2" type="CSGBox" parent="World/CSGCylinder"]
+transform = Transform( 0.927367, 0, -0.374153, 0, 1, 0, 0.374153, 0, 0.927367, 23.9181, 11.4294, -19.0291 )
+width = 9.60344
+height = 37.1351
+depth = 19.5304
+
+[node name="CSGBox" type="CSGBox" parent="World/CSGCylinder"]
+transform = Transform( 0.995598, 0, 0.093726, 0, 1, 0, -0.093726, 0, 0.995598, -27.0995, 0, 0 )
+width = 9.60344
+height = 16.9684
+depth = 19.5304
+
+[node name="CSGBox4" type="CSGBox" parent="World/CSGCylinder"]
+transform = Transform( 0.995598, 0, 0.093726, 0, 1, 0, -0.093726, 0, 0.995598, -39.3075, -6.38966, 0 )
+width = 9.60344
+height = 12.6153
+depth = 19.5304
+
+[node name="Floor" type="CSGMesh" parent="World"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.55994, 0 )
+mesh = SubResource( 1 )

@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://addons/fray/src/collision/3d/hit_state_manager_3d.gd" type="Script" id=2]
+[ext_resource path="res://lib/nodes/3d/anchored_collision_shape.gd" type="Script" id=3]
+[ext_resource path="res://lib/nodes/3d/custom_sprite_3d.gd" type="Script" id=4]
+[ext_resource path="res://src/fighter/base/fighter.gd" type="Script" id=5]
+
+[sub_resource type="BoxShape" id=1]
+extents = Vector3( 0.532, 1.67154, 1 )
+
+[node name="Fighter" type="KinematicBody"]
+script = ExtResource( 5 )
+
+[node name="Sprite" type="Sprite3D" parent="."]
+centered = false
+offset = Vector2( -60.5, 0 )
+flip_h = true
+alpha_cut = 1
+script = ExtResource( 4 )
+
+[node name="HitStateManager" type="Spatial" parent="Sprite"]
+script = ExtResource( 2 )
+source = NodePath("../..")
+
+[node name="GroundCast" type="RayCast" parent="Sprite"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
+enabled = true
+cast_to = Vector3( 0, -1.2, 0 )
+debug_shape_thickness = 5
+
+[node name="BodyShape" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.67154, 0 )
+shape = SubResource( 1 )
+script = ExtResource( 3 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+playback_process_mode = 0
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+anim_player = NodePath("../AnimationPlayer")
+process_mode = 0

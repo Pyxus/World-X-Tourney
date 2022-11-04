@@ -1,0 +1,2 @@
+extends Fray.Collision.HitboxAttributes
+
