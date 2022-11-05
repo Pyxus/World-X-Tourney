@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://src/stage/stage.gd" type="Script" id=1]
 [ext_resource path="res://assets/materials/prototype/kenney_textures/texture_11.png" type="Texture" id=2]
+[ext_resource path="res://src/fighter/base/fighter.tscn" type="PackedScene" id=3]
 [ext_resource path="res://assets/envrionments/improved_default_env.tres" type="Environment" id=4]
 [ext_resource path="res://assets/materials/prototype/prototype_8.tres" type="Material" id=5]
 
@@ -59,4 +60,11 @@ depth = 19.5304
 
 [node name="Floor" type="CSGMesh" parent="World"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.55994, 0 )
+use_collision = true
 mesh = SubResource( 1 )
+
+[node name="Fighter" parent="." instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.119776, 0 )
+
+[node name="Camera" type="Camera" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.91, 13.423 )

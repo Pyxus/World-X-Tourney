@@ -19,11 +19,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/fighter/base/fighter.gd"
 }, {
-"base": "Reference",
-"class": "FighterAI",
-"language": "GDScript",
-"path": "res://src/fighter/base/ai/fighter_ai.gd"
-}, {
 "base": "Object",
 "class": "Fray",
 "language": "GDScript",
@@ -37,7 +32,6 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "CameraGimbal": "",
 "Fighter": "",
-"FighterAI": "",
 "Fray": "",
 "Math": ""
 }
@@ -45,6 +39,7 @@ _global_script_class_icons={
 [application]
 
 config/name="World X Tourney"
+run/main_scene="res://src/main.tscn"
 config/icon="res://icon.png"
 
 [autoload]
