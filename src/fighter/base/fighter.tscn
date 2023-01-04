@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://addons/fray/src/input/controller.gd" type="Script" id=1]
 [ext_resource path="res://addons/fray/src/collision/3d/hit_state_manager_3d.gd" type="Script" id=2]
@@ -6,70 +6,18 @@
 [ext_resource path="res://lib/nodes/3d/custom_sprite_3d.gd" type="Script" id=4]
 [ext_resource path="res://src/fighter/base/fighter.gd" type="Script" id=5]
 [ext_resource path="res://addons/fray/src/state/combat_state_machine.gd" type="Script" id=6]
-[ext_resource path="res://src/fighter/base/sprites/Grey_Walk-3.png" type="Texture" id=7]
-[ext_resource path="res://src/fighter/base/sprites/Grey_Walk-2.png" type="Texture" id=8]
-[ext_resource path="res://src/fighter/base/sprites/Grey_Walk-1.png" type="Texture" id=9]
 
 [sub_resource type="BoxShape" id=1]
-extents = Vector3( 1.27341, 1.86991, 1 )
-
-[sub_resource type="Animation" id=2]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath("Sprite:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ ExtResource( 9 ) ]
-}
-
-[sub_resource type="Animation" id=4]
-resource_name = "idle"
-tracks/0/type = "value"
-tracks/0/path = NodePath("Sprite:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ ExtResource( 9 ) ]
-}
-
-[sub_resource type="Animation" id=3]
-resource_name = "walk_forward"
-length = 0.25
-loop = true
-step = 0.0833333
-tracks/0/type = "value"
-tracks/0/path = NodePath("Sprite:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.0833333, 0.166667 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
-"update": 1,
-"values": [ ExtResource( 9 ), ExtResource( 8 ), ExtResource( 7 ) ]
-}
+extents = Vector3( 0.837751, 1.86991, 1 )
 
 [node name="Fighter" type="KinematicBody"]
 script = ExtResource( 5 )
 
 [node name="Sprite" type="Sprite3D" parent="."]
-transform = Transform( 0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.5, 0, -0.550579, 0 )
+transform = Transform( 0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.5, 0, 0, 0 )
 centered = false
-offset = Vector2( -1024, 0 )
+offset = Vector2( -1024, -203 )
 alpha_cut = 2
-texture = ExtResource( 9 )
 script = ExtResource( 4 )
 
 [node name="HitStateManager" type="Spatial" parent="Sprite"]
@@ -95,6 +43,3 @@ script = ExtResource( 6 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 playback_process_mode = 0
-anims/RESET = SubResource( 2 )
-anims/idle = SubResource( 4 )
-anims/walk_forward = SubResource( 3 )

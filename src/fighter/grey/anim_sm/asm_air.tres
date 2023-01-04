@@ -1,0 +1,21 @@
+[gd_resource type="AnimationNodeStateMachine" load_steps=5 format=2]
+
+[sub_resource type="AnimationNodeAnimation" id=1]
+animation = "air_fall"
+
+[sub_resource type="AnimationNodeAnimation" id=2]
+animation = "air_rise"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=3]
+advance_condition = "is_falling"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=4]
+advance_condition = "not_falling"
+
+[resource]
+states/air_fall/node = SubResource( 1 )
+states/air_fall/position = Vector2( 591, 145 )
+states/air_rise/node = SubResource( 2 )
+states/air_rise/position = Vector2( 285, 143 )
+transitions = [ "air_rise", "air_fall", SubResource( 3 ), "air_fall", "air_rise", SubResource( 4 ) ]
+start_node = "air_rise"

@@ -1,7 +1,7 @@
 extends "state_machine_builder.gd"
 ## Global state machine builder
 
-const GraphNodeStateMachineGlobal = preload("../graph_node/graph_node_state_machine_global.gd")
+const StateNodeStateMachineGlobal = preload("../node/state_node_state_machine_global.gd")
 
 ## Type: Dictionary<String, String[]>
 ## Hint: <from tag, to tags>
@@ -14,9 +14,9 @@ var _tags_by_state: Dictionary
 var _global_transitions: Array
 
 
-func _build_impl(start_state: String = "") -> GraphNodeStateMachine:
-	var root := GraphNodeStateMachineGlobal.new()
-	_configure_state_machine(start_state, root)
+func _build_impl() -> StateNodeStateMachine:
+	var root := StateNodeStateMachineGlobal.new()
+	_configure_state_machine(root)
 	return root
 
 
@@ -49,7 +49,7 @@ func tag_multi(states: PoolStringArray, tags: PoolStringArray) -> Reference:
 ##
 ## Returns a reference to this builder
 func tag(state: String, tags: PoolStringArray) -> Reference:
-	add_state(state)
+	_add_state_once(state)
 		
 	if not _tags_by_state.has(state):
 		_tags_by_state[state] = []
@@ -73,10 +73,10 @@ func _create_global_transition(to: String, transition: StateMachineTransition) -
 	_global_transitions.append(tr)
 	return tr
 
-func _configure_state_machine(start_state: String, root: GraphNodeStateMachine) -> void:
-	._configure_state_machine(start_state, root)
+func _configure_state_machine(root: StateNodeStateMachine) -> void:
+	._configure_state_machine(root)
 
-	if root is GraphNodeStateMachineGlobal:
+	if root is StateNodeStateMachineGlobal:
 		for state in _tags_by_state:
 			root.set_node_tags(state, _tags_by_state[state])
 		

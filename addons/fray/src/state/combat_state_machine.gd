@@ -4,11 +4,11 @@ extends "state_machine.gd"
 ##
 ## @desc:
 ##		A state machine which can contain and switch between multiple situations.
-##		A situation is a `GraphNodeStateMachineGlobal` that represents the set of actions avilable to a combatant.
+##		A situation is a `StateNodeStateMachineGlobal` that represents the set of actions avilable to a combatant.
 ##		For example, in many fighting games the actions a combatant can perform when situated on the ground differ
 ##		from when they're in the air.
 ##
-##		When adding situations it is recommended to build the graph node using the `CombatSituationBuilder`.
+##		When adding situations it is recommended to build the state node using the `CombatSituationBuilder`.
 ##		Example:
 ##			var builder := Fray.State.CombatSituationBuilder.new()
 ##			combat_sm.add_situation("on_ground", builder\
@@ -17,9 +17,9 @@ extends "state_machine.gd"
 ##				.build()
 ##			)
 
-const GraphNodeStateMachineGlobal = preload("graph_node/graph_node_state_machine_global.gd")
+const StateNodeStateMachineGlobal = preload("node/state_node_state_machine_global.gd")
 
-## Allow transitions transitions to occur in the state machine.
+## Allow transitions transitions to occur in the root state machine.
 ## Enabling and disabling this property allows you to control when a combatant
 ## is allowed to transition into the next buffered state.
 ## This can be used to control when a player is allowed to 'cancel' an attack.
@@ -44,7 +44,7 @@ var _input_buffer: Array
 ## Type: String[]
 var _state_buffer: Array
 
-## Type: Dictionary<String, GraphNodeStateMachineGlobal>
+## Type: Dictionary<String, StateNodeStateMachineGlobal>
 ## Hint: <situation name, >
 var _situations: Dictionary
 
@@ -52,20 +52,14 @@ var _time_since_last_input_ms: float
 
 
 func _advance_impl(input: Dictionary = {}, args: Dictionary = {})  -> void:
-	if root == null:
-		return
-
-	if root.current_node.empty():
-		push_warning("Failed to advance. Current state not set.")
-		return
+	._advance_impl(input, args)
 	
 	var current_time := OS.get_ticks_msec()
-
 	while not _input_buffer.empty() and _state_buffer.size() <= max_buffered_transitions:
 		var buffered_input: BufferedInput = _input_buffer.pop_front()
 		var next_state: String 
 		var time_since_last_input = (current_time - _time_since_last_input_ms) / 1000.0
-
+		
 		if buffered_input is BufferedInputButton:
 			next_state = root.get_next_node({
 				input = buffered_input.input,
@@ -77,7 +71,8 @@ func _advance_impl(input: Dictionary = {}, args: Dictionary = {})  -> void:
 				input = buffered_input.sequence_name,
 				time_since_last_input = time_since_last_input,
 			})
-
+		
+		print(next_state + "!")
 		var time_since_inputted: int = current_time - buffered_input.time_stamp
 		if not next_state.empty() and time_since_inputted <= input_max_buffer_time_ms:
 			if allow_transitions:
@@ -92,12 +87,12 @@ func _advance_impl(input: Dictionary = {}, args: Dictionary = {})  -> void:
 		root.go_to(_state_buffer.pop_front())
 
 
-func set_root(value: GraphNodeStateMachine) -> void:
+func set_root(value: StateNodeStateMachine) -> void:
 	.set_root(value)
 	push_warning("The CombatStateMachine changes the root internally based on the current situation. You should not need to set it directly.")
 
 ## Adds a combat situation to the state machine.
-func add_situation(situation_name: String, node: GraphNodeStateMachineGlobal) -> void:
+func add_situation(situation_name: String, node: StateNodeStateMachineGlobal) -> void:
 	if has_situation(situation_name):
 		push_warning("Combat situation name '%s' already exists.")
 		return
@@ -119,7 +114,7 @@ func change_situation(situation_name: String) -> void:
 		root.go_to_start()
 
 ## Returns a situation with the given name if it exists.
-func get_situation(situation_name: String) -> GraphNodeStateMachineGlobal:
+func get_situation(situation_name: String) -> StateNodeStateMachineGlobal:
 	if has_situation(situation_name):
 		return _situations[situation_name]
 	return null
@@ -132,12 +127,15 @@ func has_situation(situation_name: String) -> bool:
 ## Setter for 'input_max_buffer_time' property
 func set_input_max_buffer_time(value: int) -> void:
 	input_max_buffer_time = value
-	input_max_buffer_time_ms = round((input_max_buffer_time / Engine.iterations_per_second) * 1000)
+	input_max_buffer_time_ms = floor((input_max_buffer_time / float(Engine.iterations_per_second)) * 1000)
+	property_list_changed_notify()
+	
 
 ## Setter for 'input_max_buffer_time_ms' property
 func set_input_max_buffer_time_ms(value: int) -> void:
 	input_max_buffer_time_ms = value
-	input_max_buffer_time = round(Engine.iterations_per_second * input_max_buffer_time_ms) * 1000
+	input_max_buffer_time = ceil((Engine.iterations_per_second * input_max_buffer_time_ms) / 1000.0)
+	property_list_changed_notify()
 
 ## Buffers an input button to be processed by the state machine
 ##

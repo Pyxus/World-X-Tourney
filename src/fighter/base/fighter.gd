@@ -1,9 +1,12 @@
 class_name Fighter
 extends "fighter_body.gd"
 
-var device: int
+const StateNodeAnimation = preload("state_nodes/state_node_animation.gd")
+const AnimationNodeFactory = preload("state_nodes/animation_node_factory.gd")
+
 var gravity: float = Math.Physics.calc_projectile_g(.5, 10)
 var opponent_global_pos: Vector3
+var is_facing_right: bool = true
 
 var _is_sprite_following := true
 
@@ -13,6 +16,7 @@ onready var _animation_player: AnimationPlayer = $AnimationPlayer
 onready var _hit_state_manager: Fray.Collision.HitStateManager3D = $Sprite/HitStateManager
 onready var _combat_sm: Fray.State.CombatStateMachine = $CombatStateMachine
 onready var _controller: Fray.Input.Controller = $Controller
+
 
 func _ready() -> void:
 	FrayInput.connect("input_detected", self, "_on_FrayInput_input_detected")
@@ -27,14 +31,14 @@ func _process(_delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	velocity.y += gravity * delta
 
-	if is_left_of_opponent() and _sprite.scale.x != 1 or not is_left_of_opponent() and _sprite.scale.x == 1:
-		_switched_sides_impl()
-	
-	_update_velocity_impl()
-	move_and_push()
-
 	if is_on_ground():
 		velocity.y = 0
+
+	if not is_facing_oponent():
+		_switched_sides_impl()
+
+	_motion_impl()
+	move_and_push()
 
 
 func move(dir: int, move_speed: float) -> void:
@@ -49,19 +53,34 @@ func jump(displacement: Vector2, is_relative: bool = true) -> void:
 		Math.Physics.calc_v_to_reach(gravity, displacement.y), 0)
 
 
+func is_facing_oponent() -> bool:
+	return (
+		is_left_of_opponent() 
+		and is_facing_right 
+		or 
+		not is_left_of_opponent() 
+		and not is_facing_right
+		)
+
+
 func is_on_ground() -> bool:
-	return _floor_cast.is_colliding() and not _floor_cast.get_collider() is get_script()
+	return _floor_cast.is_colliding()
 
-
-## Returns 'a' value if left of opponent else returns 'b'
-func val_by_side(a, b):
-	return a if is_left_of_opponent() else b
-	
 
 func is_left_of_opponent() -> bool:
 	return Math.is_vec_facing(
 		global_translation.direction_to(opponent_global_pos), 
-		Vector3.RIGHT, 0, 1)
+		Vector3.RIGHT, 0, 1
+		)
+
+
+func set_is_facing_right(value: bool) -> void:
+	is_facing_right = value
+	_sprite.flip_h = not is_facing_right
+
+## Returns 'a' value if left of opponent else returns 'b'
+func val_by_side(a, b):
+	return a if is_left_of_opponent() else b
 
 
 func _interpolate_sprite(t: float, p0: Vector3, p1: Vector3) -> void:
@@ -72,8 +91,7 @@ func _interpolate_sprite(t: float, p0: Vector3, p1: Vector3) -> void:
 
 
 func _switched_sides_impl() -> void:
-	#_sprite.scale.x = 1 if is_left_of_opponent() else -1
-	pass
+	set_is_facing_right(is_left_of_opponent())
 
 
 func _repositioned_impl(from: Vector3) -> void:
@@ -81,22 +99,10 @@ func _repositioned_impl(from: Vector3) -> void:
 	tween.tween_method(self, "_interpolate_sprite", 0.0, 1.0, 0.2, [from, global_translation])
 
 
-func _update_velocity_impl() -> void:
-	if _controller.is_pressed("left"):
-		velocity.x = -5
-		_animation_player.play("walk_forward")
-	elif _controller.is_pressed("right"):
-		velocity.x = 5
-		_animation_player.play_backwards("walk_forward")
-	else:
-		velocity.x = 0
-		_animation_player.play("idle")
-	
-	if _controller.is_just_pressed("up"):
-		jump(Vector2(0, 10))
+func _motion_impl() -> void:
 	pass
 
 
 func _on_FrayInput_input_detected(input_event: Fray.Input.FrayInputEvent) -> void:
-	if input_event.is_just_pressed() and input_event.filtered and input_event.device == device:
+	if input_event.is_just_pressed() and input_event.filtered and input_event.device == _controller.device:
 		_combat_sm.buffer_button(input_event.input, input_event.pressed)

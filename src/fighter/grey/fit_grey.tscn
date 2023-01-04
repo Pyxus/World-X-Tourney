@@ -1,0 +1,218 @@
+[gd_scene load_steps=28 format=2]
+
+[ext_resource path="res://src/fighter/base/fighter.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/fighter/grey/fit_grey.gd" type="Script" id=2]
+[ext_resource path="res://src/fighter/grey/sprites/Grey_Walk-1.png" type="Texture" id=3]
+[ext_resource path="res://src/fighter/grey/sprites/Grey_Idle__Crouch-2.png" type="Texture" id=4]
+[ext_resource path="res://src/fighter/grey/sprites/Grey_Walk-2.png" type="Texture" id=5]
+[ext_resource path="res://src/fighter/grey/sprites/Grey_Idle__Crouch-3.png" type="Texture" id=6]
+[ext_resource path="res://src/fighter/grey/sprites/Grey_Walk-3.png" type="Texture" id=7]
+[ext_resource path="res://src/fighter/grey/sprites/Grey_Idle__Crouch-1.png" type="Texture" id=8]
+[ext_resource path="res://src/fighter/grey/sprites/Grey_Jump-2.png" type="Texture" id=9]
+[ext_resource path="res://src/fighter/grey/sprites/Grey_Jump-1.png" type="Texture" id=10]
+[ext_resource path="res://src/fighter/grey/sprites/Grey_Sprint-3.png" type="Texture" id=11]
+[ext_resource path="res://src/fighter/grey/sprites/Wolf_Bite_1st_Half-3.png" type="Texture" id=12]
+[ext_resource path="res://src/fighter/grey/sprites/Wolf_Bite_1st_Half-1.png" type="Texture" id=13]
+[ext_resource path="res://src/fighter/grey/sprites/Wolf_Bite_1st_Half-2.png" type="Texture" id=14]
+[ext_resource path="res://src/fighter/grey/sprites/Grey_Sprint-2.png" type="Texture" id=15]
+[ext_resource path="res://src/fighter/grey/sprites/Grey_Sprint-1.png" type="Texture" id=16]
+[ext_resource path="res://src/fighter/grey/anim_sm/asm_ground.tres" type="AnimationNodeStateMachine" id=17]
+
+[sub_resource type="Animation" id=2]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ ExtResource( 3 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=7]
+resource_name = "air_fall"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ ExtResource( 10 ) ]
+}
+
+[sub_resource type="Animation" id=8]
+resource_name = "air_rise"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ ExtResource( 9 ) ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "idle"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ ExtResource( 5 ) ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "idle_crouch"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ ExtResource( 6 ) ]
+}
+
+[sub_resource type="Animation" id=5]
+resource_name = "idle_crouch_t"
+length = 0.25
+step = 0.125
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.125 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ ExtResource( 8 ), ExtResource( 4 ) ]
+}
+
+[sub_resource type="Animation" id=16]
+resource_name = "mv_wolf_bite"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ ExtResource( 13 ), ExtResource( 14 ), ExtResource( 12 ) ]
+}
+
+[sub_resource type="Animation" id=17]
+resource_name = "sprint"
+length = 0.3
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ ExtResource( 16 ), ExtResource( 15 ), ExtResource( 11 ) ]
+}
+
+[sub_resource type="Animation" id=1]
+resource_name = "walk_forward"
+length = 0.375
+loop = true
+step = 0.125
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.125, 0.25 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ ExtResource( 3 ), ExtResource( 5 ), ExtResource( 7 ) ]
+}
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=14]
+
+[node name="FitGrey" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+
+[node name="Sprite" parent="." index="0"]
+texture = ExtResource( 3 )
+
+[node name="GroundCast" parent="Sprite" index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+
+[node name="CombatStateMachine" parent="." index="3"]
+active = true
+input_max_buffer_time = 1
+input_max_buffer_time_ms = 2
+
+[node name="AnimationPlayer" parent="." index="4"]
+anims/RESET = SubResource( 2 )
+anims/air_fall = SubResource( 7 )
+anims/air_rise = SubResource( 8 )
+anims/idle = SubResource( 3 )
+anims/idle_crouch = SubResource( 4 )
+anims/idle_crouch_t = SubResource( 5 )
+anims/mv_wolf_bite = SubResource( 16 )
+anims/sprint = SubResource( 17 )
+anims/walk_forward = SubResource( 1 )
+
+[node name="AnimationTree" type="AnimationTree" parent="." index="5"]
+tree_root = ExtResource( 17 )
+anim_player = NodePath("../AnimationPlayer")
+active = true
+parameters/playback = SubResource( 14 )
+parameters/conditions/is_crouching = false
+parameters/conditions/is_sprinting = false
+parameters/conditions/is_walking_forward = false
+parameters/conditions/not_crouching = false
+parameters/conditions/not_sprinting = false
+parameters/conditions/not_walking_forward = false
+
+[node name="DebugLabel" type="Label" parent="." index="6"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "Test"

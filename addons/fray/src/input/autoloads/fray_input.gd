@@ -46,6 +46,7 @@ func _physics_process(_delta: float) -> void:
 		for bind_name in _input_map.get_bind_names():
 			var bind := _input_map.get_bind(bind_name)
 			var input_state := device_state.get_input_state(bind_name)
+			input_state.strength = bind.get_strength(device)
 
 			if bind.is_pressed(device):
 				if not input_state.pressed:
@@ -99,23 +100,12 @@ func _physics_process(_delta: float) -> void:
 							break
 		
 		for input in device_state.get_all_inputs():
-			var input_state := _get_input_state(input, device)
-			var input_event := FrayInputEvent.new()
-			
-			input_event.device = device
-			input_event.input = input
-			input_event.time_pressed = input_state.time_pressed
-			input_event.physics_frame = input_state.physics_frame
-			input_event.idle_frame = input_state.idle_frame
-			input_event.time_detected = OS.get_ticks_msec()
-			input_event.pressed = input_state.pressed
-			input_event.virtually_pressed = input_state.virtually_pressed
-			input_event.filtered = not device_state.has_filtered(input)
-
 			if is_just_pressed(input, device) or is_just_released(input, device):
+				var input_event := _create_input_event(input, device, device_state)
 				input_event.echo = false
 				emit_signal("input_detected", input_event)
 			elif is_pressed(input, device):
+				var input_event := _create_input_event(input, device, device_state)
 				input_event.echo = true
 				emit_signal("input_detected", input_event)
 
@@ -176,17 +166,8 @@ func is_device_connected(device: int) -> bool:
 func get_strength(input: String, device: int = DEVICE_KBM_JOY1) -> float:
 	match _get_input_state(input, device):
 		var input_state:
-			if _input_map.has_bind(input):
-				var bind := _input_map.get_bind(input)
-		
-				if bind is InputBindAction:
-					return Input.get_action_strength(bind.action)
-				elif bind is InputBindJoyAxis:
-					return Input.get_joy_axis(device, bind.axis)
-		
-			return float(input_state.pressed)
+			return input_state.strength
 		null:
-			push_error("Failed to get input strength")
 			return 0.0
 
 ## Get axis input by specifiying two input ids, one negative and one positive.
@@ -283,6 +264,21 @@ func _get_bind_state(input: String, device: int) -> InputState:
 		return _get_input_state(input, device)
 	return null
 
+
+func _create_input_event(input: String, device: int, device_state: DeviceState) -> FrayInputEvent:
+	var input_state := _get_input_state(input, device)
+	var input_event := FrayInputEvent.new()
+			
+	input_event.device = device
+	input_event.input = input
+	input_event.time_pressed = input_state.time_pressed
+	input_event.physics_frame = input_state.physics_frame
+	input_event.idle_frame = input_state.idle_frame
+	input_event.time_detected = OS.get_ticks_msec()
+	input_event.pressed = input_state.pressed
+	input_event.virtually_pressed = input_state.virtually_pressed
+	input_event.filtered = not device_state.has_filtered(input)
+	return input_event
 
 func _on_Input_joy_connection_changed(device: int, connected: bool) -> void:
 	if device != DEVICE_KBM_JOY1:

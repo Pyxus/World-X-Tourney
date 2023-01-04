@@ -1,0 +1,62 @@
+[gd_resource type="AnimationNodeStateMachine" load_steps=16 format=2]
+
+[sub_resource type="AnimationNodeAnimation" id=1]
+animation = "idle"
+
+[sub_resource type="AnimationNodeAnimation" id=2]
+animation = "idle_crouch"
+
+[sub_resource type="AnimationNodeAnimation" id=3]
+animation = "idle_crouch_t"
+
+[sub_resource type="AnimationNodeAnimation" id=17]
+animation = "sprint"
+
+[sub_resource type="AnimationNodeAnimation" id=9]
+animation = "walk_forward"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=10]
+advance_condition = "is_crouching"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=11]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=13]
+advance_condition = "is_walking_forward"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=14]
+advance_condition = "not_crouching"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=15]
+advance_condition = "not_crouching"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=16]
+advance_condition = "not_walking_forward"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=18]
+advance_condition = "is_sprinting"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=19]
+advance_condition = "is_sprinting"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=20]
+advance_condition = "not_sprinting"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=21]
+advance_condition = "not_sprinting"
+
+[resource]
+states/idle/node = SubResource( 1 )
+states/idle/position = Vector2( 392, 102 )
+states/idle_crouch/node = SubResource( 2 )
+states/idle_crouch/position = Vector2( 392, 310 )
+states/idle_crouch_t/node = SubResource( 3 )
+states/idle_crouch_t/position = Vector2( 236, 222 )
+states/sprint/node = SubResource( 17 )
+states/sprint/position = Vector2( 504, -19 )
+states/walk_forward/node = SubResource( 9 )
+states/walk_forward/position = Vector2( 602, 102 )
+transitions = [ "idle", "idle_crouch_t", SubResource( 10 ), "idle_crouch_t", "idle_crouch", SubResource( 11 ), "idle", "walk_forward", SubResource( 13 ), "idle_crouch_t", "idle", SubResource( 14 ), "idle_crouch", "idle", SubResource( 15 ), "walk_forward", "idle", SubResource( 16 ), "walk_forward", "sprint", SubResource( 18 ), "idle", "sprint", SubResource( 19 ), "sprint", "idle", SubResource( 20 ), "sprint", "walk_forward", SubResource( 21 ) ]
+start_node = "idle"
+graph_offset = Vector2( -30, -93 )

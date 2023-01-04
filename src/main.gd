@@ -1,5 +1,6 @@
 extends Node
 
+const CIF := Fray.Input.CompositeInputFactory
 
 func _ready() -> void:
 	FrayInputMap.add_bind_fray_action("left", [
@@ -20,6 +21,7 @@ func _ready() -> void:
 	FrayInputMap.add_bind_fray_action("down", [
 		Fray.Input.InputBindJoyButton.new(JOY_DPAD_DOWN),
 		Fray.Input.InputBindJoyAxis.new(JOY_AXIS_1, true),
+		Fray.Input.InputBindKey.new(KEY_S),
 	])
 	FrayInputMap.add_bind_fray_action("light", [
 		Fray.Input.InputBindJoyButton.new(JOY_SONY_SQUARE)
@@ -34,19 +36,18 @@ func _ready() -> void:
 		Fray.Input.InputBindJoyButton.new(JOY_SONY_X)
 	])
 	
-	var CIF := Fray.Input.ComplexInputFactory
 	
-	FrayInputMap.add_complex_input("forward", CIF.new_conditional()\
+	FrayInputMap.add_composite_input("forward", CIF.new_conditional()\
 		.add_component("", CIF.new_simple(["right"]))\
 		.add_component("on_right", CIF.new_simple(["left"]))\
 		.build())
 
-	FrayInputMap.add_complex_input("backward", CIF.new_conditional()\
+	FrayInputMap.add_composite_input("backward", CIF.new_conditional()\
 		.add_component("", CIF.new_simple(["left"]))\
 		.add_component("on_right", CIF.new_simple(["right"]))\
 		.build())
 	
-	FrayInputMap.add_complex_input("forward_up", CIF.new_conditional()\
+	FrayInputMap.add_composite_input("forward_up", CIF.new_conditional()\
 		.add_component("", CIF.new_combination_async()\
 			.add_component(CIF.new_simple(["up"]))\
 			.add_component(CIF.new_simple(["right"]))\
@@ -58,7 +59,7 @@ func _ready() -> void:
 		.virtual()\
 		.build())
 		
-	FrayInputMap.add_complex_input("forward_down", CIF.new_conditional()\
+	FrayInputMap.add_composite_input("forward_down", CIF.new_conditional()\
 		.add_component("", CIF.new_combination_async()\
 			.add_component(CIF.new_simple(["down"]))\
 			.add_component(CIF.new_simple(["right"]))\
@@ -70,7 +71,7 @@ func _ready() -> void:
 		.virtual()\
 		.build())
 		
-	FrayInputMap.add_complex_input("backward_up", CIF.new_conditional()\
+	FrayInputMap.add_composite_input("backward_up", CIF.new_conditional()\
 		.add_component("", CIF.new_combination_async()\
 			.add_component(CIF.new_simple(["up"]))\
 			.add_component(CIF.new_simple(["left"]))\
@@ -82,7 +83,7 @@ func _ready() -> void:
 		.virtual()\
 		.build())
 		
-	FrayInputMap.add_complex_input("backward_down", CIF.new_conditional()\
+	FrayInputMap.add_composite_input("backward_down", CIF.new_conditional()\
 		.add_component("", CIF.new_combination_async()\
 			.add_component(CIF.new_simple(["down"]))\
 			.add_component(CIF.new_simple(["left"]))\
